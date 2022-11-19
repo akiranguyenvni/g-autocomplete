@@ -43,10 +43,18 @@ export default function Asynchronous() {
   }, [open]);
 
   React.useEffect(() => {
-    if (window !== undefined)
-        fetch(`https://serpapi.com/search.json?q=Coffee&location=Austin,+Texas,+United+States&hl=en&gl=us&google_domain=google.comhttps://recs.sachtrang.com/autoComplete?command=get&q=you`)
+    const url = `https://recs.sachtrang.com/autoComplete?command=get&q=${inputValue}`;
+    fetch(url)
         .then((rs) => rs.json())
-        .then((v) => setOptions(v))
+        .then((v) => {
+            var suggestions = v[3];
+            console.log(suggestions)
+            var smt = Object.values(suggestions).map((title, year) => {
+                return {title, year}
+            })
+            console.log(`${JSON.stringify(smt)}`)
+            setOptions(smt)
+        })
         .catch(error => console.error('Error: ', error));
   }, [inputValue])
 
@@ -68,7 +76,6 @@ export default function Asynchronous() {
     //   }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
-        console.log(`--- onInputChange newValue:${newInputValue}`)
       }}
       isOptionEqualToValue={(option, value) => option.title === value.title}
       getOptionLabel={(option) => option.title}
@@ -82,7 +89,9 @@ export default function Asynchronous() {
             ...params.InputProps,
             endAdornment: (
               <React.Fragment>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading 
+                    ? <CircularProgress color="inherit" size={20} /> 
+                    : null}
                 {params.InputProps.endAdornment}
               </React.Fragment>
             ),
