@@ -8,21 +8,21 @@ import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import throttle from 'lodash/throttle';
 
-// This key was created specifically for the demo in mui.com.
-// You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = 'AIzaSyDWUU1XdY-rh1DO6Xw6gmOTzsLRoy94zRA';
+// // This key was created specifically for the demo in mui.com.
+// // You need to create a new one for your application.
+// const GOOGLE_MAPS_API_KEY = 'AIzaSyDWUU1XdY-rh1DO6Xw6gmOTzsLRoy94zRA';
 
-function loadScript(src, position, id) {
-  if (!position) {
-    return;
-  }
+// function loadScript(src, position, id) {
+//   if (!position) {
+//     return;
+//   }
 
-  const script = document.createElement('script');
-  script.setAttribute('async', '');
-  script.setAttribute('id', id);
-  script.src = src;
-  position.appendChild(script);
-}
+//   const script = document.createElement('script');
+//   script.setAttribute('async', '');
+//   script.setAttribute('id', id);
+//   script.src = src;
+//   position.appendChild(script);
+// }
 
 const autocompleteService = { current: null };
 
@@ -32,70 +32,94 @@ export default function GoogleMaps() {
   const [options, setOptions] = React.useState([]);
   const loaded = React.useRef(false);
 
-  if (typeof window !== 'undefined' && !loaded.current) {
-    if (!document.querySelector('#google-maps')) {
-      // loadScript(
-      //   `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
-      //   document.querySelector('head'),
-      //   'google-maps',
-      // );
-      loadScript(
-        `https://recs.sachtrang.com/autoComplete?command=get&q=you`,
-        document.querySelector('head'),
-        'google-maps',
-      );
-    }
+  // if (typeof window !== 'undefined' && !loaded.current) {
+  //   if (!document.querySelector('#google-maps')) {
+  //     // loadScript(
+  //     //   `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+  //     //   document.querySelector('head'),
+  //     //   'google-maps',
+  //     // );
+  //     loadScript(
+  //       `https://recs.sachtrang.com/autoComplete?command=get&q=you`,
+  //       document.querySelector('head'),
+  //       'google-maps',
+  //     );
+  //   }
 
-    loaded.current = true;
-  }
+  //   loaded.current = true;
+  // }
 
-  const fetch = React.useMemo(
-    () =>
-      throttle((request, callback) => {
-        autocompleteService.current.getPlacePredictions(request, callback);
-      }, 200),
-    [],
-  );
+  // const fetch = React.useMemo(
+  //   () =>
+  //     throttle((request, callback) => {
+  //       autocompleteService.current.getPlacePredictions(request, callback);
+  //     }, 200),
+  //   [],
+  // );
 
-  React.useEffect(() => {
-    let active = true;
+  const searchContent = async () => {
+    const url = `https://recs.sachtrang.com/autoComplete?command=get&q=${inputValue}`;
+    fetch(url)
+      .then((rs) => rs.json())
+      .then((v) => {
+        var [_, _, _, suggestions] = v;
+        // console.log(suggestions)
+        // var smt = Object.values(suggestions ?? {})//.map((title, year) => {
+        //   return { title }
+        // })
+        // console.log(`--- ${JSON.stringify(smt)}`)
 
-    if (!autocompleteService.current && window.google) {
-      console.log(1)
-      autocompleteService.current =
-        new window.google.maps.places.AutocompleteService();
-    }
-    if (!autocompleteService.current) {
-      console.log(1.2)
-      return undefined;
-    }
-
-    console.log(`2 inputValue:${inputValue}`)
-    if (inputValue === '') {
-      console.log(`2.2 value:${value}`)
-      setOptions(value ? [value] : []);
-      return undefined;
-    }
-
-    fetch({ input: inputValue }, (results) => {
-      console.log(3)
-      if (active) {
         let newOptions = [];
 
         if (value) {
           newOptions = [value];
         }
 
-        if (results) {
-          newOptions = [...newOptions, ...results];
+        if (suggestions) {
+          newOptions = [...newOptions, ...suggestions];
         }
 
-        setOptions(newOptions);
-      }
-    });
+        console.log(`--- newOptions:${newOptions}`)
+
+        setOptions(newOptions)
+      })
+      .catch(error => console.error('Error: ', error));
+  }
+
+  React.useEffect(() => {
+    let active = true;
+
+    // if (!autocompleteService.current && window.google) {
+    //   autocompleteService.current =
+    //     new window.google.maps.places.AutocompleteService();
+    // }
+    // if (!autocompleteService.current) {
+    //   return undefined;
+    // }
+
+    if (inputValue === '') {
+      setOptions(value ? [value] : []);
+      return undefined;
+    }
+
+    searchContent();
+    // fetch({ input: inputValue }, (results) => {
+    //   if (active) {
+    //     let newOptions = [];
+
+    //     if (value) {
+    //       newOptions = [value];
+    //     }
+
+    //     if (results) {
+    //       newOptions = [...newOptions, ...results];
+    //     }
+
+    //     setOptions(newOptions);
+    //   }
+    // });
 
     return () => {
-      console.log(4)
       active = false;
     };
   }, [value, inputValue, fetch]);
