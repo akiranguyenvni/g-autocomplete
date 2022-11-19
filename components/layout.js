@@ -7,7 +7,7 @@ import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 
 const name = "Hi! I'm G-Search"
-export const siteTitle = 'Next.js Sample Website'
+export const siteTitle = 'G-Search Sample Website'
 
 export default function Layout({ children, home }) {
   return (
