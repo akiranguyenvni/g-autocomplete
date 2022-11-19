@@ -61,7 +61,7 @@ export default function Asynchronous() {
   return (
     <Autocomplete
       id="asynchronous-demo"
-      sx={{ width: 300 }}
+      sx={{ width: 600 }}
     //   open={open}
     //   onOpen={() => {
     //     setOpen(true);
@@ -84,7 +84,7 @@ export default function Asynchronous() {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Asynchronous"
+          label="G-Autocomplete"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
