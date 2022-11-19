@@ -25,8 +25,8 @@ export default function Home({ allPostsData }) {
 
       <section className={utilStyles.headingMd}>
         <p>{introduction} <ArrowDownwardIcon /></p>
-        <CountrySelect />
-        <GoogleMaps />
+        {/* <CountrySelect /> */}
+        {/* <GoogleMaps /> */}
         <Asynchronous />
       </section>
 

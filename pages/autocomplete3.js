@@ -47,12 +47,12 @@ export default function Asynchronous() {
     fetch(url)
         .then((rs) => rs.json())
         .then((v) => {
-            var suggestions = v[3];
-            console.log(suggestions)
-            var smt = Object.values(suggestions).map((title, year) => {
+            var [_, _, _, suggestions] = v;
+            // console.log(suggestions)
+            var smt = Object.values(suggestions ?? {}).map((title, year) => {
                 return {title, year}
             })
-            console.log(`${JSON.stringify(smt)}`)
+            // console.log(`${JSON.stringify(smt)}`)
             setOptions(smt)
         })
         .catch(error => console.error('Error: ', error));
