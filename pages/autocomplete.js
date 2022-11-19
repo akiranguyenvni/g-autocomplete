@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { countries} from './data'
 
-export function CountrySelect() {
+export default function CountrySelect() {
     return (
         <Autocomplete
           id="country-select-demo"

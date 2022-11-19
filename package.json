@@ -12,6 +12,7 @@
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
     "@mui/styled-engine-sc": "^5.10.14",
+    "autosuggest-highlight": "^3.3.4",
     "date-fns": "^2.29.3",
     "gray-matter": "^4.0.3",
     "next": "latest",
