@@ -3,14 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function sleep(delay = 0) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
-}
-
 export default function Asynchronous() {
-  const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const loading = open && options.length === 0;
   const [value, setValue] = React.useState(null);
@@ -36,10 +29,12 @@ export default function Asynchronous() {
       sx={{ width: 600 }}
       filterOptions={(options, state) => options}
       onChange={(event, newValue) => {
+        event.preventDefault();
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
       }}
       onInputChange={(event, newInputValue) => {
+        event.preventDefault();
         setInputValue(newInputValue);
       }}
       // isOptionEqualToValue={(option, value) => {
