@@ -1,4 +1,4 @@
-export const countries = [
+export default countries = [
   { code: 'AD', label: 'Andorra', phone: '376' },
   {
     code: 'AE',
